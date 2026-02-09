@@ -125,7 +125,7 @@ frontend/
 #### 配置文件 (`backend/.env.local`)
 ```env
 # LLM API 配置 - DeepSeek
-OPENAI_API_KEY="sk-c5b96f7c1554461d9930edf30c849b3d"
+OPENAI_API_KEY=""
 OPENAI_BASE_URL="https://api.deepseek.com"
 OPENAI_MODEL="deepseek-chat"
 OPENAI_MAX_TOKENS=4000
