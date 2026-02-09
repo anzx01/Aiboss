@@ -16,13 +16,19 @@ class LLMService {
       throw new Error('OPENAI_API_KEY is not set in environment variables');
     }
 
+    const baseURL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
+
     this.client = new OpenAI({
       apiKey,
+      baseURL,
       timeout: this.timeout
     });
 
     this.model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
     this.maxTokens = parseInt(process.env.OPENAI_MAX_TOKENS || '4000');
+
+    console.log(`🤖 LLM Service initialized with base URL: ${baseURL}`);
+    console.log(`📝 Using model: ${this.model}`);
   }
 
   /**
