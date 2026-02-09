@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id             String   @id @default(cuid())
+  fingerprint    String   @unique
+  created_at     DateTime @default(now())
+  last_active_at DateTime @updatedAt
+
+  tasks Task[]
+
+  @@map("sessions")
+}
+
+model Task {
+  id             String   @id @default(cuid())
+  agent_id       String
+  session_id     String
+  input_data     Json
+  output_data    Json?
+  status         TaskStatus @default(PENDING)
+  error_message  String?
+  created_at     DateTime @default(now())
+  completed_at   DateTime?
+  execution_time Int?     // 毫秒
+
+  session Session @relation(fields: [session_id], references: [id], onDelete: Cascade)
+
+  @@index([session_id])
+  @@index([agent_id])
+  @@index([status])
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
