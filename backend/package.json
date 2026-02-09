@@ -1,0 +1,38 @@
+{
+  "name": "aiboss-backend",
+  "version": "0.1.0",
+  "description": "AI Boss Backend API",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ai", "agent", "api"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "typescript": "^5.3.3",
+    "@prisma/client": "^5.7.1",
+    "openai": "^4.20.1",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.1.5",
+    "zod": "^3.22.4",
+    "express-session": "^1.17.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.5",
+    "@types/cors": "^2.8.17",
+    "@types/express-session": "^1.17.10",
+    "prisma": "^5.7.1",
+    "ts-node": "^10.9.2",
+    "nodemon": "^3.0.2"
+  }
+}
