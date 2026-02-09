@@ -236,16 +236,16 @@ export default function TaskPage({ params }: { params: { id: string } }) {
             <div className="flex items-center gap-2">
               <span
                 className={`px-3 py-1 text-sm font-medium ${
-                  task.status === 'completed'
+                  task.status.toLowerCase() === 'completed'
                     ? 'bg-success text-white'
-                    : task.status === 'failed'
+                    : task.status.toLowerCase() === 'failed'
                     ? 'bg-red-500 text-white'
                     : 'bg-gray-200 text-gray-dark'
                 }`}
               >
-                {task.status === 'completed'
+                {task.status.toLowerCase() === 'completed'
                   ? '已完成'
-                  : task.status === 'failed'
+                  : task.status.toLowerCase() === 'failed'
                   ? '失败'
                   : '处理中'}
               </span>
@@ -266,7 +266,7 @@ export default function TaskPage({ params }: { params: { id: string } }) {
         </div>
 
         {/* Output */}
-        {task.status === 'completed' && task.output_data && (
+        {task.status.toLowerCase() === 'completed' && task.output_data && (
           <div className="bg-white border border-gray-border p-8 mb-8">
             {renderOutput(task.output_data)}
           </div>
