@@ -6,6 +6,8 @@
 
 **本质定位**：AI 外包公司（不是聊天工具，不是 AI 工具集合）
 
+![AI Boss 首页](./screenshots/homepage.png)
+
 ---
 
 ## ✨ 核心特性
@@ -47,28 +49,87 @@ npm install
 创建 `backend/.env` 文件：
 
 ```env
-# 数据库
-DATABASE_URL="postgresql://user:password@localhost:5432/aiboss"
+# 数据库配置 - Supabase
+# 使用 Pooler 连接，添加 pgbouncer=true 参数避免 prepared statement 错误
+DATABASE_URL="postgresql://postgres.xxxxx:password@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true"
 
-# LLM API
+# LLM API 配置 - DeepSeek
 OPENAI_API_KEY="sk-..."
-OPENAI_MODEL="gpt-4o-mini"
+OPENAI_BASE_URL="https://api.deepseek.com"
+OPENAI_MODEL="deepseek-chat"
+OPENAI_MAX_TOKENS=4000
 
-# 服务器
+# 服务器配置
 PORT=3001
 NODE_ENV="development"
 
-# Session
-SESSION_SECRET="your-secret-key"
+# Session 配置
+SESSION_SECRET="your-super-secret-session-key"
+
+# CORS 配置
+CORS_ORIGIN="http://localhost:3000"
+
+# Rate Limiting
+RATE_LIMIT_WINDOW_MS=3600000
+RATE_LIMIT_MAX_REQUESTS=20
 ```
+
+**注意**：
+- 如果使用 Supabase，请确保添加 `?pgbouncer=true` 参数
+- 支持 DeepSeek API（兼容 OpenAI 格式）
 
 #### 4. 初始化数据库
 
+> 📖 **详细指南**：完整的数据库设置步骤请查看 [数据库设置详细指南](./docs/DATABASE_SETUP.md)
+
+**快速开始（使用 Supabase）**：
+
+1. 在 [Supabase](https://supabase.com) 创建项目
+2. 获取 **Connection pooling** 连接字符串（端口 6543）
+3. 在连接字符串末尾添加 `?pgbouncer=true` 参数
+4. 在 Supabase SQL Editor 中执行以下 SQL：
+
+```sql
+-- 创建 TaskStatus 枚举类型
+CREATE TYPE "TaskStatus" AS ENUM ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED');
+
+-- 创建 sessions 表
+CREATE TABLE IF NOT EXISTS "sessions" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "fingerprint" TEXT NOT NULL UNIQUE,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "last_active_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 创建 tasks 表
+CREATE TABLE IF NOT EXISTS "tasks" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "agent_id" TEXT NOT NULL,
+    "session_id" TEXT NOT NULL,
+    "input_data" JSONB NOT NULL,
+    "output_data" JSONB,
+    "status" "TaskStatus" NOT NULL DEFAULT 'PENDING',
+    "error_message" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "completed_at" TIMESTAMP(3),
+    "execution_time" INTEGER,
+    CONSTRAINT "tasks_session_id_fkey" FOREIGN KEY ("session_id") REFERENCES "sessions"("id") ON DELETE CASCADE
+);
+
+-- 创建索引
+CREATE INDEX IF NOT EXISTS "tasks_session_id_idx" ON "tasks"("session_id");
+CREATE INDEX IF NOT EXISTS "tasks_agent_id_idx" ON "tasks"("agent_id");
+CREATE INDEX IF NOT EXISTS "tasks_status_idx" ON "tasks"("status");
+```
+
+**使用本地 PostgreSQL**：
+
 ```bash
 cd backend
-npx prisma migrate dev
-npx prisma db seed
+npx prisma db push
 ```
+
+⚠️ **常见问题**：如果遇到 `prepared statement already exists` 错误，请确保使用 Connection pooling 连接并添加 `?pgbouncer=true` 参数。详见 [数据库设置详细指南](./docs/DATABASE_SETUP.md#常见问题排查)。
 
 #### 5. 启动后端服务
 
@@ -194,15 +255,14 @@ aiboss/
 ### 后端
 - **框架**：Node.js + Express
 - **语言**：TypeScript
-- **数据库**：PostgreSQL + Prisma ORM
-- **缓存**：Redis（可选）
-- **LLM**：OpenAI API / Anthropic Claude
+- **数据库**：Supabase PostgreSQL + Prisma ORM
+- **LLM**：DeepSeek API（兼容 OpenAI 格式）
 
 ### 基础设施
 - **前端部署**：Vercel
 - **后端部署**：Railway / Render
-- **数据库**：Railway PostgreSQL
-- **监控**：Sentry
+- **数据库**：Supabase PostgreSQL
+- **LLM API**：DeepSeek
 
 ---
 
@@ -349,14 +409,13 @@ npx prisma migrate reset
 - [x] PRD 文档
 - [x] 开发计划
 - [x] 项目初始化
-- [ ] Agent 定义与 Prompt 工程（Day 1-2）
-- [ ] 后端开发（Day 3-5）
-- [ ] 前端开发（Day 6-7）
-- [ ] 测试与优化（Day 8）
+- [x] Agent 定义与 Prompt 工程
+- [x] 后端开发（Express + Prisma + DeepSeek API）
+- [x] 前端开发（Next.js 14 + Tailwind CSS）
+- [x] 数据库配置（Supabase PostgreSQL）
+- [x] 完整功能测试
 - [ ] 内测发布
 - [ ] 公开发布
-
-详细开发计划请查看 [DEVELOPMENT_PLAN.md](./DEVELOPMENT_PLAN.md)
 
 ---
 
