@@ -33,14 +33,14 @@ export default function Footer() {
 
             <div className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold font-display">公司</h3>
-              <Link href="/about" className="text-sm text-gray-secondary hover:text-white transition-colors">
-                关于我们
+              <Link href="https://github.com/anzx01/Aiboss" className="text-sm text-gray-secondary hover:text-white transition-colors">
+                GitHub
               </Link>
-              <Link href="/blog" className="text-sm text-gray-secondary hover:text-white transition-colors">
-                博客
+              <Link href="https://github.com/anzx01/Aiboss/issues" className="text-sm text-gray-secondary hover:text-white transition-colors">
+                问题反馈
               </Link>
-              <Link href="/contact" className="text-sm text-gray-secondary hover:text-white transition-colors">
-                联系我们
+              <Link href="/privacy" className="text-sm text-gray-secondary hover:text-white transition-colors">
+                隐私说明
               </Link>
             </div>
 
@@ -62,10 +62,7 @@ export default function Footer() {
             © 2024 AI Boss. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="https://twitter.com" className="text-sm text-gray-secondary hover:text-white transition-colors">
-              Twitter
-            </Link>
-            <Link href="https://github.com" className="text-sm text-gray-secondary hover:text-white transition-colors">
+            <Link href="https://github.com/anzx01/Aiboss" className="text-sm text-gray-secondary hover:text-white transition-colors">
               GitHub
             </Link>
           </div>

@@ -17,8 +17,8 @@ module.exports = {
         success: '#22C55E',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Space Grotesk', 'sans-serif'],
+        sans: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

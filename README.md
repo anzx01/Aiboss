@@ -26,7 +26,7 @@
 
 - Node.js 18+
 - PostgreSQL 14+
-- OpenAI API Key（或其他 LLM API）
+- DeepSeek API Key、OpenAI API Key，或其他 OpenAI-compatible LLM API Key
 
 ### 安装步骤
 
@@ -46,12 +46,18 @@ npm install
 
 #### 3. 配置后端环境变量
 
-创建 `backend/.env` 文件：
+复制示例文件并创建 `.env`：
+
+```bash
+cp .env.example .env
+```
+
+然后按你的环境修改：
 
 ```env
 # 数据库配置 - Supabase
 # 使用 Pooler 连接，添加 pgbouncer=true 参数避免 prepared statement 错误
-DATABASE_URL="postgresql://postgres.xxxxx:password@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DATABASE_URL="postgresql://postgres.xxxxx:<YOUR_DATABASE_PASSWORD>@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true"
 
 # LLM API 配置 - DeepSeek
 OPENAI_API_KEY="your-llm-api-key"
@@ -63,9 +69,6 @@ OPENAI_MAX_TOKENS=4000
 PORT=3001
 NODE_ENV="development"
 
-# Session 配置
-SESSION_SECRET="your-super-secret-session-key"
-
 # CORS 配置
 CORS_ORIGIN="http://localhost:3000"
 
@@ -76,7 +79,7 @@ RATE_LIMIT_MAX_REQUESTS=20
 
 **注意**：
 - 如果使用 Supabase，请确保添加 `?pgbouncer=true` 参数
-- 支持 DeepSeek API（兼容 OpenAI 格式）
+- 支持 DeepSeek、OpenAI 或其他兼容 OpenAI Chat Completions 格式的 LLM API
 
 #### 4. 初始化数据库
 
@@ -189,7 +192,8 @@ aiboss/
 │
 ├── docs/                 # 文档
 ├── prd.md               # 产品需求文档
-├── DEVELOPMENT_PLAN.md  # 开发计划
+├── SECURITY.md          # 安全披露和密钥处理说明
+├── THIRD_PARTY_NOTICES.md # 第三方依赖许可说明
 └── README.md            # 项目说明
 ```
 
@@ -247,8 +251,8 @@ aiboss/
 
 ### 前端
 - **框架**：Next.js 14（App Router）
-- **UI 库**：Tailwind CSS + shadcn/ui
-- **状态管理**：React Context / Zustand
+- **UI**：Tailwind CSS + 自定义 React 组件
+- **状态管理**：React Hooks
 - **表单处理**：React Hook Form + Zod
 - **HTTP 客户端**：Axios
 
@@ -256,13 +260,13 @@ aiboss/
 - **框架**：Node.js + Express
 - **语言**：TypeScript
 - **数据库**：Supabase PostgreSQL + Prisma ORM
-- **LLM**：DeepSeek API（兼容 OpenAI 格式）
+- **LLM**：DeepSeek / OpenAI-compatible API
 
 ### 基础设施
 - **前端部署**：Vercel
 - **后端部署**：Railway / Render
 - **数据库**：Supabase PostgreSQL
-- **LLM API**：DeepSeek
+- **LLM API**：DeepSeek / OpenAI-compatible Provider
 
 ---
 
@@ -396,8 +400,7 @@ npx prisma migrate reset
 3. 配置环境变量：
    - `DATABASE_URL`
    - `OPENAI_API_KEY`
-   - `SESSION_SECRET`
-4. 运行迁移：`npx prisma migrate deploy`
+4. 初始化数据库：`npx prisma db push`
 5. 部署
 
 详细部署文档请查看 [docs/deployment.md](./docs/deployment.md)
@@ -451,13 +454,15 @@ npx prisma migrate reset
 
 本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
 
+第三方依赖许可说明请查看 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)，安全披露流程请查看 [SECURITY.md](./SECURITY.md)。
+
 ---
 
 ## 📞 联系方式
 
 - **项目主页**：https://github.com/anzx01/Aiboss
 - **问题反馈**：https://github.com/anzx01/Aiboss/issues
-- **邮箱**：[your-email@example.com]
+- **安全问题**：请参考 [SECURITY.md](./SECURITY.md)，不要在公开 Issue 中粘贴密钥或敏感数据
 
 ---
 
@@ -465,8 +470,9 @@ npx prisma migrate reset
 
 - [Next.js](https://nextjs.org/) - React 框架
 - [Prisma](https://www.prisma.io/) - 数据库 ORM
-- [shadcn/ui](https://ui.shadcn.com/) - UI 组件库
-- [OpenAI](https://openai.com/) - LLM API
+- [OpenAI](https://openai.com/) - OpenAI-compatible SDK
+- [DeepSeek](https://www.deepseek.com/) - OpenAI-compatible LLM API
+- [Supabase](https://supabase.com/) - PostgreSQL 托管服务
 
 ---
 

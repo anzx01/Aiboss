@@ -44,33 +44,6 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 /**
- * GET /api/tasks/:id
- * 获取任务详情
- */
-router.get('/:id', async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const task = await taskService.getTask(id);
-
-    res.json({
-      id: task.id,
-      agent_id: task.agent_id,
-      input_data: task.input_data,
-      output_data: task.output_data,
-      status: task.status,
-      error_message: task.error_message,
-      execution_time: task.execution_time,
-      created_at: task.created_at,
-      completed_at: task.completed_at
-    });
-  } catch (error) {
-    console.error('Error fetching task:', error);
-    const message = error instanceof Error ? error.message : 'Failed to fetch task';
-    res.status(404).json({ error: message });
-  }
-});
-
-/**
  * GET /api/tasks
  * 获取用户任务历史
  */
@@ -101,6 +74,33 @@ router.get('/stats', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching task stats:', error);
     res.status(500).json({ error: 'Failed to fetch task stats' });
+  }
+});
+
+/**
+ * GET /api/tasks/:id
+ * 获取任务详情
+ */
+router.get('/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const task = await taskService.getTask(id);
+
+    res.json({
+      id: task.id,
+      agent_id: task.agent_id,
+      input_data: task.input_data,
+      output_data: task.output_data,
+      status: task.status,
+      error_message: task.error_message,
+      execution_time: task.execution_time,
+      created_at: task.created_at,
+      completed_at: task.completed_at
+    });
+  } catch (error) {
+    console.error('Error fetching task:', error);
+    const message = error instanceof Error ? error.message : 'Failed to fetch task';
+    res.status(404).json({ error: message });
   }
 });
 

@@ -46,12 +46,12 @@
 5. 在 **"Connection string"** 下拉菜单中选择 **"Session mode"**
 6. 复制显示的连接字符串，格式类似：
    ```
-   postgresql://postgres.xxxxx:[YOUR-PASSWORD]@aws-x-region.pooler.supabase.com:6543/postgres
+   postgresql://postgres.xxxxx:<YOUR_DATABASE_PASSWORD>@aws-x-region.pooler.supabase.com:6543/postgres
    ```
-7. 将 `[YOUR-PASSWORD]` 替换为你在步骤 2 中设置的数据库密码
+7. 将 `<YOUR_DATABASE_PASSWORD>` 替换为你在步骤 2 中设置的数据库密码
 8. 在连接字符串末尾添加 `?pgbouncer=true` 参数，最终格式：
    ```
-   postgresql://postgres.xxxxx:your-password@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true
+   postgresql://postgres.xxxxx:<YOUR_DATABASE_PASSWORD>@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true
    ```
 
 ### 步骤 4：配置后端环境变量
@@ -62,7 +62,7 @@
 ```env
 # 数据库配置 - Supabase
 # 使用 Pooler 连接（端口 6543），添加 pgbouncer=true 参数避免 prepared statement 错误
-DATABASE_URL="postgresql://postgres.xxxxx:your-password@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DATABASE_URL="postgresql://postgres.xxxxx:<YOUR_DATABASE_PASSWORD>@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true"
 ```
 
 ### 步骤 5：创建数据库表
@@ -201,10 +201,10 @@ CREATE DATABASE aiboss;
 
 ```env
 # 本地 PostgreSQL 连接
-DATABASE_URL="postgresql://postgres:your-password@localhost:5432/aiboss"
+DATABASE_URL="postgresql://postgres:<YOUR_DATABASE_PASSWORD>@localhost:5432/aiboss"
 ```
 
-将 `your-password` 替换为你的 PostgreSQL 密码。
+将 `<YOUR_DATABASE_PASSWORD>` 替换为你的 PostgreSQL 密码。
 
 ### 步骤 4：初始化数据库
 
@@ -303,7 +303,7 @@ psql -U postgres -d aiboss
 
 正确格式：
 ```
-postgresql://postgres.xxxxx:password@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true
+postgresql://postgres.xxxxx:<YOUR_DATABASE_PASSWORD>@aws-x-region.pooler.supabase.com:6543/postgres?pgbouncer=true
 ```
 
 ### 问题 2：`Can't reach database server`
